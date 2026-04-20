@@ -1,7 +1,20 @@
-import { connectDB } from "@/lib/db";
+export const dynamic = "force-dynamic";
 
 export async function GET() {
-  await connectDB();
+  try {
+    const { connectDB } = await import("@/lib/db");
 
-  return Response.json({ message: "Database connected test" });
+    await connectDB();
+
+    return Response.json({
+      message: "Database connected successfully",
+    });
+  } catch (error) {
+    console.error("DB TEST ERROR:", error);
+
+    return Response.json(
+      { message: "Database connection failed" },
+      { status: 500 },
+    );
+  }
 }
